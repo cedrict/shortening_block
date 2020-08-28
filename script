@@ -1,15 +1,13 @@
 #! /bin/bash
 
 visu=0
-eta_m=0
 
-for nelx in 32 48 64 80 96 112 128 ; do
+for nelx in 16 32 48; do
     for phi in 0  ; do
-        echo ${nelx}_${phi} 
-        python3 stone.py $nelx $visu $phi $eta_m> opla
-        mkdir output_${nelx}_${phi}
-        mv *.ascii output_${nelx}_${phi}
-        mv *.vtu output_${nelx}_${phi}
+        for eta_m in 0 19 20 ; do
+            echo ${nelx} ${phi} ${eta_m}
+            python3 stone.py $nelx $visu $phi $eta_m> opla
+        done
     done
 done
 

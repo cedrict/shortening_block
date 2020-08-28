@@ -10,9 +10,9 @@ from numpy import linalg as LA
 
 def ubc(x,y):
     vaal=5e-9
-    if x<Lx/2:
+    if x<50e3:
        val=vaal
-    elif x>Lx/2:
+    elif x>50e3:
        val=-vaal
     else:
        val=0
@@ -32,7 +32,7 @@ def viscosity(exx,eyy,exy,pq,c,phi,iter,x,y,eta_m,eta_v):
 
     e2=np.sqrt(0.5*(exx*exx+eyy*eyy)+exy*exy)
 
-    if abs(x-Lx/2)<3.125e3 and abs(y-Ly/2)<3.125e3: #inclusion
+    if abs(x-50e3)<3.125e3 and abs(y-50e3)<3.125e3: #inclusion
        val=1e17
     elif y<25e3 or y>75e3: #layers
        val=1e17
@@ -121,14 +121,18 @@ if int(len(sys.argv) == 5):
    phi=phi/180*np.pi
    eta_m=float(sys.argv[4])
    eta_m=10**eta_m
+   name='_nelx'+sys.argv[1]+'_phi'+sys.argv[3]+'_etam'+sys.argv[4]
 else:
-   nelx = 64
+   nelx = 16
    visu = 1
    phi=0/180*np.pi
    eta_m=0#1e21
+   name=''
+   
+print(name)
 
 tol_nl=1e-6
-niter=50
+niter=25
 
 Lx=100e3
 Ly=100e3
@@ -137,6 +141,11 @@ rho=0
 cohesion=1e8
 gx=0
 gy=0
+
+quarter=True
+if quarter:
+   Lx/=2
+   Ly/=2
 
 nely = int(nelx*Ly/Lx)        # number of elements in y direction
 nnx=2*nelx+1                  # number of nodes, x direction
@@ -164,9 +173,9 @@ use_srn=True
 rVnodes=[-1,+1,1,-1, 0,1,0,-1,0]
 sVnodes=[-1,-1,1,+1,-1,0,1, 0,0]
    
-ustats_file=open("stats_u.ascii","w")
-vstats_file=open("stats_v.ascii","w")
-pstats_file=open("stats_p.ascii","w")
+ustats_file=open("stats_u"+name+".ascii","w")
+vstats_file=open("stats_v"+name+".ascii","w")
+pstats_file=open("stats_p"+name+".ascii","w")
 
 #################################################################
 #################################################################
@@ -254,15 +263,26 @@ start = timing.time()
 bc_fix=np.zeros(NfemV,dtype=np.bool)    # boundary condition, yes/no
 bc_val=np.zeros(NfemV,dtype=np.float64) # boundary condition, value
 
-for i in range(0,NV):
-    if xV[i]/Lx<eps: # left boundary
-       bc_fix[i*ndofV  ] = True ; bc_val[i*ndofV  ] = ubc(xV[i],yV[i])
-    if xV[i]/Lx>(1-eps): # right boundary
-       bc_fix[i*ndofV  ] = True ; bc_val[i*ndofV  ] = ubc(xV[i],yV[i])
-    if yV[i]/Ly<eps: # bottom boundary
-       bc_fix[i*ndofV+1] = True ; bc_val[i*ndofV+1] = vbc(xV[i],yV[i])
-    if yV[i]/Ly>1-eps: # top boundary
-       bc_fix[i*ndofV+1] = True ; bc_val[i*ndofV+1] = vbc(xV[i],yV[i])
+if quarter:
+   for i in range(0,NV):
+       if xV[i]/Lx<eps: # left boundary
+          bc_fix[i*ndofV  ] = True ; bc_val[i*ndofV  ] = ubc(xV[i],yV[i])
+       if xV[i]/Lx>(1-eps): # right boundary
+          bc_fix[i*ndofV  ] = True ; bc_val[i*ndofV  ] = 0 
+       if yV[i]/Ly<eps: # bottom boundary
+          bc_fix[i*ndofV+1] = True ; bc_val[i*ndofV+1] = vbc(xV[i],yV[i])
+       if yV[i]/Ly>1-eps: # top boundary
+          bc_fix[i*ndofV+1] = True ; bc_val[i*ndofV+1] = 0 
+else:
+   for i in range(0,NV):
+       if xV[i]/Lx<eps: # left boundary
+          bc_fix[i*ndofV  ] = True ; bc_val[i*ndofV  ] = ubc(xV[i],yV[i])
+       if xV[i]/Lx>(1-eps): # right boundary
+          bc_fix[i*ndofV  ] = True ; bc_val[i*ndofV  ] = ubc(xV[i],yV[i])
+       if yV[i]/Ly<eps: # bottom boundary
+          bc_fix[i*ndofV+1] = True ; bc_val[i*ndofV+1] = vbc(xV[i],yV[i])
+       if yV[i]/Ly>1-eps: # top boundary
+          bc_fix[i*ndofV+1] = True ; bc_val[i*ndofV+1] = vbc(xV[i],yV[i])
 
 print("setup: boundary conditions: %.3f s" % (timing.time() - start))
 
@@ -295,9 +315,9 @@ v_mem=np.zeros(NV,dtype=np.float64)
 p    = np.zeros(NfemP,dtype=np.float64) # pressure field 
 p_mem=np.zeros(NfemP,dtype=np.float64)
 
-convfile=open('conv.ascii',"w")
-vrmsfile=open('vrms.ascii',"w")
-avrgsrfile=open('avrgsr.ascii',"w")
+convfile=open('conv'+name+'.ascii',"w")
+vrmsfile=open('vrms'+name+'.ascii',"w")
+avrgsrfile=open('avrgsr'+name+'.ascii',"w")
 
 for iter in range(0,niter):
 
@@ -900,7 +920,7 @@ for iter in range(0,niter):
    start = timing.time()
 
    if iter%1==0:
-      filename = 'solution_nl_{:04d}.vtu'.format(iter)
+      filename = 'solution_nl_{:04d}'.format(iter)+name+'.vtu'
       vtufile=open(filename,"w")
       vtufile.write("<VTKFile type='UnstructuredGrid' version='0.1' byte_order='BigEndian'> \n")
       vtufile.write("<UnstructuredGrid> \n")
@@ -966,12 +986,13 @@ for iter in range(0,niter):
 ######################################################################
 # extract strain rate on horizontal line
 ######################################################################
+# 5*100/16=31.25km
 
-sr_file=open("line.ascii","w")
+sr_file=open("line"+name+".ascii","w")
 counter=0
 for j in range(0,nny):
     for i in range(0,nnx):
-        if abs(yV[counter]-11*Ly/16)<1:
+        if abs(yV[counter]-31.25e3)<1:
            sr_file.write("%6e %6e %6e %6e %6e\n"  % (xV[counter],srn[counter],u[counter],v[counter],q[counter]))
         counter += 1
     # end for i
@@ -1056,7 +1077,7 @@ print("compute avrg elemental strain rate: %.3f s" % (timing.time() - start))
 # the 9-node Q2 element does not exist in vtk, but the 8-node one 
 # does, i.e. type=23. 
 
-filename = 'solution.vtu'
+filename = 'solution'+name+'.vtu'
 vtufile=open(filename,"w")
 vtufile.write("<VTKFile type='UnstructuredGrid' version='0.1' byte_order='BigEndian'> \n")
 vtufile.write("<UnstructuredGrid> \n")

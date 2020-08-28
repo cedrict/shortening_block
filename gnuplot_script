@@ -1,50 +1,63 @@
 set term pdf enhanced font "Times,11pt"
 set grid
 set xlabel 'x'
-set ylabel '~{/Symbol e}{1.1.}_e'
+set key outside
+set arrow from 31250, graph 0 to 31250, graph 1 nohead dashtype 2 
 
+set ylabel '~{/Symbol e}{1.1.}_e'
 set output 'line_sr.pdf'
 plot[][]\
-'output_32_0/line.ascii' w l t '32^2',\
-'output_48_0/line.ascii' w l t '48^2',\
-'output_64_0/line.ascii' w l t '64^2',\
-'output_80_0/line.ascii' w l t '80^2',\
-'output_96_0/line.ascii' w l t '96^2',\
-'output_112_0/line.ascii' w l t '112^2',\
-'output_128_0/line.ascii' w l t '128^2',\
+'line_nelx16_phi0_etam0.ascii'  u 1:2 lt 1 dashtype 1 w l t '16^2,phi=0,eta_m=0',\
+'line_nelx32_phi0_etam0.ascii'  u 1:2 lt 2 dashtype 1 w l t '32^2,phi=0,eta_m=0',\
+'line_nelx48_phi0_etam0.ascii'  u 1:2 lt 3 dashtype 1 w l t '48^2,phi=0,eta_m=0',\
+'line_nelx16_phi0_etam19.ascii' u 1:2 lt 1 dashtype 2 w l t '16^2,phi=0,eta_m=19',\
+'line_nelx32_phi0_etam19.ascii' u 1:2 lt 2 dashtype 2 w l t '32^2,phi=0,eta_m=19',\
+'line_nelx48_phi0_etam19.ascii' u 1:2 lt 3 dashtype 2 w l t '48^2,phi=0,eta_m=19',\
+'line_nelx16_phi0_etam20.ascii' u 1:2 lt 1 dashtype 5 w l t '16^2,phi=0,eta_m=20',\
+'line_nelx32_phi0_etam20.ascii' u 1:2 lt 2 dashtype 5 w l t '32^2,phi=0,eta_m=20',\
+'line_nelx48_phi0_etam20.ascii' u 1:2 lt 3 dashtype 5 w l t '48^2,phi=0,eta_m=20',\
+
 
 set ylabel 'v_x'
 set output 'line_u.pdf'
 plot[][]\
-'output_32_0/line.ascii'  u 1:3 w l t '32^2',\
-'output_48_0/line.ascii'  u 1:3 w l t '48^2',\
-'output_64_0/line.ascii'  u 1:3 w l t '64^2',\
-'output_80_0/line.ascii'  u 1:3 w l t '80^2',\
-'output_96_0/line.ascii'  u 1:3 w l t '96^2',\
-'output_112_0/line.ascii' u 1:3 w l t '112^2',\
-'output_128_0/line.ascii' u 1:3 w l t '128^2',\
+'line_nelx16_phi0_etam0.ascii'  u 1:3 w l t '16^2,phi=0,eta_m=0',\
+'line_nelx32_phi0_etam0.ascii'  u 1:3 w l t '32^2,phi=0,eta_m=0',\
+'line_nelx48_phi0_etam0.ascii'  u 1:3 w l t '48^2,phi=0,eta_m=0',\
+'line_nelx16_phi0_etam19.ascii' u 1:3 w l t '16^2,phi=0,eta_m=19',\
+'line_nelx32_phi0_etam19.ascii' u 1:3 w l t '32^2,phi=0,eta_m=19',\
+'line_nelx48_phi0_etam19.ascii' u 1:3 w l t '48^2,phi=0,eta_m=19',\
+'line_nelx16_phi0_etam20.ascii' u 1:3 w l t '16^2,phi=0,eta_m=20',\
+'line_nelx32_phi0_etam20.ascii' u 1:3 w l t '32^2,phi=0,eta_m=20',\
+'line_nelx48_phi0_etam20.ascii' u 1:3 w l t '48^2,phi=0,eta_m=20',\
+
 
 set ylabel 'v_y'
 set output 'line_v.pdf'
 plot[][]\
-'output_32_0/line.ascii'  u 1:4 w l t '32^2',\
-'output_48_0/line.ascii'  u 1:4 w l t '48^2',\
-'output_64_0/line.ascii'  u 1:4 w l t '64^2',\
-'output_80_0/line.ascii'  u 1:4 w l t '80^2',\
-'output_96_0/line.ascii'  u 1:4 w l t '96^2',\
-'output_112_0/line.ascii' u 1:4 w l t '112^2',\
-'output_128_0/line.ascii' u 1:4 w l t '128^2',\
+'line_nelx16_phi0_etam0.ascii'  u 1:4 w l t '16^2,phi=0,eta_m=0',\
+'line_nelx32_phi0_etam0.ascii'  u 1:4 w l t '32^2,phi=0,eta_m=0',\
+'line_nelx48_phi0_etam0.ascii'  u 1:4 w l t '48^2,phi=0,eta_m=0',\
+'line_nelx16_phi0_etam19.ascii' u 1:4 w l t '16^2,phi=0,eta_m=19',\
+'line_nelx32_phi0_etam19.ascii' u 1:4 w l t '32^2,phi=0,eta_m=19',\
+'line_nelx48_phi0_etam19.ascii' u 1:4 w l t '48^2,phi=0,eta_m=19',\
+'line_nelx16_phi0_etam20.ascii' u 1:4 w l t '16^2,phi=0,eta_m=20',\
+'line_nelx32_phi0_etam20.ascii' u 1:4 w l t '32^2,phi=0,eta_m=20',\
+'line_nelx48_phi0_etam20.ascii' u 1:4 w l t '48^2,phi=0,eta_m=20',\
+
 
 set ylabel 'p'
 set output 'line_p.pdf'
 plot[][]\
-'output_32_0/line.ascii'  u 1:5 w l t '32^2',\
-'output_48_0/line.ascii'  u 1:5 w l t '48^2',\
-'output_64_0/line.ascii'  u 1:5 w l t '64^2',\
-'output_80_0/line.ascii'  u 1:5 w l t '80^2',\
-'output_96_0/line.ascii'  u 1:5 w l t '96^2',\
-'output_112_0/line.ascii' u 1:5 w l t '112^2',\
-'output_128_0/line.ascii' u 1:5 w l t '128^2',\
+'line_nelx16_phi0_etam0.ascii'  u 1:5 w l t '16^2,phi=0,eta_m=0',\
+'line_nelx32_phi0_etam0.ascii'  u 1:5 w l t '32^2,phi=0,eta_m=0',\
+'line_nelx48_phi0_etam0.ascii'  u 1:5 w l t '48^2,phi=0,eta_m=0',\
+'line_nelx16_phi0_etam19.ascii' u 1:5 w l t '16^2,phi=0,eta_m=19',\
+'line_nelx32_phi0_etam19.ascii' u 1:5 w l t '32^2,phi=0,eta_m=19',\
+'line_nelx48_phi0_etam19.ascii' u 1:5 w l t '48^2,phi=0,eta_m=19',\
+'line_nelx16_phi0_etam20.ascii' u 1:5 w l t '16^2,phi=0,eta_m=20',\
+'line_nelx32_phi0_etam20.ascii' u 1:5 w l t '32^2,phi=0,eta_m=20',\
+'line_nelx48_phi0_etam20.ascii' u 1:5 w l t '48^2,phi=0,eta_m=20',\
 
 
 set xlabel '# iteration'
@@ -52,16 +65,43 @@ set ylabel 'nonlinear residual'
 set log y 
 set output 'conv.pdf'
 plot[][]\
-'output_32_0/conv.ascii'  u 1:2 w l t '32^2',\
-'output_48_0/conv.ascii'  u 1:2 w l t '48^2',\
-'output_64_0/conv.ascii'  u 1:2 w l t '64^2',\
-'output_80_0/conv.ascii'  u 1:2 w l t '80^2',\
-'output_96_0/conv.ascii'  u 1:2 w l t '96^2',\
-'output_112_0/conv.ascii' u 1:2 w l t '112^2',\
-'output_128_0/conv.ascii' u 1:2 w l t '128^2',\
+'conv_nelx16_phi0_etam0.ascii'  u 1:2 lt 1 dashtype 1 w l t '16^2,phi=0,eta_m=0',\
+'conv_nelx32_phi0_etam0.ascii'  u 1:2 lt 2 dashtype 1 w l t '32^2,phi=0,eta_m=0',\
+'conv_nelx48_phi0_etam0.ascii'  u 1:2 lt 3 dashtype 1 w l t '48^2,phi=0,eta_m=0',\
+'conv_nelx16_phi0_etam19.ascii' u 1:2 lt 1 dashtype 2 w l t '16^2,phi=0,eta_m=19',\
+'conv_nelx32_phi0_etam19.ascii' u 1:2 lt 2 dashtype 2 w l t '32^2,phi=0,eta_m=19',\
+'conv_nelx48_phi0_etam19.ascii' u 1:2 lt 3 dashtype 2 w l t '48^2,phi=0,eta_m=19',\
+'conv_nelx16_phi0_etam20.ascii' u 1:2 lt 1 dashtype 5 w l t '16^2,phi=0,eta_m=20',\
+'conv_nelx32_phi0_etam20.ascii' u 1:2 lt 2 dashtype 5 w l t '32^2,phi=0,eta_m=20',\
+'conv_nelx48_phi0_etam20.ascii' u 1:2 lt 3 dashtype 5 w l t '48^2,phi=0,eta_m=20',\
 
 
+unset log y 
+set output 'vrms.pdf'
+plot[][]\
+'vrms_nelx16_phi0_etam0.ascii'  u 1:2 w l t '16^2,phi=0,eta_m=0',\
+'vrms_nelx32_phi0_etam0.ascii'  u 1:2 w l t '32^2,phi=0,eta_m=0',\
+'vrms_nelx48_phi0_etam0.ascii'  u 1:2 w l t '48^2,phi=0,eta_m=0',\
+'vrms_nelx16_phi0_etam19.ascii' u 1:2 w l t '16^2,phi=0,eta_m=19',\
+'vrms_nelx32_phi0_etam19.ascii' u 1:2 w l t '32^2,phi=0,eta_m=19',\
+'vrms_nelx48_phi0_etam19.ascii' u 1:2 w l t '48^2,phi=0,eta_m=19',\
+'vrms_nelx16_phi0_etam20.ascii' u 1:2 w l t '16^2,phi=0,eta_m=20',\
+'vrms_nelx32_phi0_etam20.ascii' u 1:2 w l t '32^2,phi=0,eta_m=20',\
+'vrms_nelx48_phi0_etam20.ascii' u 1:2 w l t '48^2,phi=0,eta_m=20',\
 
+
+set ylabel '<~{/Symbol e}{1.1.}_e>'
+set output 'avrgsr.pdf'
+plot[][]\
+'avrgsr_nelx16_phi0_etam0.ascii'  u 1:2 lt 1 dashtype 1 w l t '16^2,phi=0,eta_m=0',\
+'avrgsr_nelx32_phi0_etam0.ascii'  u 1:2 lt 2 dashtype 1 w l t '32^2,phi=0,eta_m=0',\
+'avrgsr_nelx48_phi0_etam0.ascii'  u 1:2 lt 3 dashtype 1 w l t '48^2,phi=0,eta_m=0',\
+'avrgsr_nelx16_phi0_etam19.ascii' u 1:2 lt 1 dashtype 2 w l t '16^2,phi=0,eta_m=19',\
+'avrgsr_nelx32_phi0_etam19.ascii' u 1:2 lt 2 dashtype 2 w l t '32^2,phi=0,eta_m=19',\
+'avrgsr_nelx48_phi0_etam19.ascii' u 1:2 lt 3 dashtype 2 w l t '48^2,phi=0,eta_m=19',\
+'avrgsr_nelx16_phi0_etam20.ascii' u 1:2 lt 1 dashtype 5 w l t '16^2,phi=0,eta_m=20',\
+'avrgsr_nelx32_phi0_etam20.ascii' u 1:2 lt 2 dashtype 5 w l t '32^2,phi=0,eta_m=20',\
+'avrgsr_nelx48_phi0_etam20.ascii' u 1:2 lt 3 dashtype 5 w l t '48^2,phi=0,eta_m=20',\
 
 
 
