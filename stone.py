@@ -113,7 +113,7 @@ mP=4     # number of pressure nodes making up an element
 ndofV=2  # number of velocity degrees of freedom per node
 ndofP=1  # number of pressure degrees of freedom 
 
-if int(len(sys.argv) == 5):
+if int(len(sys.argv) == 6):
    print("reading arguments")
    nelx = int(sys.argv[1])
    visu = int(sys.argv[2])
@@ -121,6 +121,7 @@ if int(len(sys.argv) == 5):
    phi=phi/180*np.pi
    eta_m=float(sys.argv[4])
    eta_m=10**eta_m
+   niter = int(sys.argv[5])
    name='_nelx'+sys.argv[1]+'_phi'+sys.argv[3]+'_etam'+sys.argv[4]
 else:
    nelx = 16
@@ -128,11 +129,9 @@ else:
    phi=0/180*np.pi
    eta_m=0#1e21
    name=''
-   
-print(name)
+   niter=25
 
 tol_nl=1e-6
-niter=25
 
 Lx=100e3
 Ly=100e3
@@ -302,18 +301,16 @@ NNNV    = np.zeros(mV,dtype=np.float64)           # shape functions V
 NNNP    = np.zeros(mP,dtype=np.float64)           # shape functions P
 solP    = np.zeros(NfemP,dtype=np.float64)  
 solV    = np.zeros(NfemV,dtype=np.float64)  
-etaq_mem = np.zeros(nq,dtype=np.float64)        # viscosity of q points 
-exxn=np.zeros(NV,dtype=np.float64)
-eyyn=np.zeros(NV,dtype=np.float64)
-exyn=np.zeros(NV,dtype=np.float64)
-srn=np.zeros(NV,dtype=np.float64)
-
-u    =np.zeros(NV,dtype=np.float64)    # x-component velocity
-v    =np.zeros(NV,dtype=np.float64)    # y-component velocity
-u_mem=np.zeros(NV,dtype=np.float64)
-v_mem=np.zeros(NV,dtype=np.float64)
-p    = np.zeros(NfemP,dtype=np.float64) # pressure field 
-p_mem=np.zeros(NfemP,dtype=np.float64)
+exxn    = np.zeros(NV,dtype=np.float64)
+eyyn    = np.zeros(NV,dtype=np.float64)
+exyn    = np.zeros(NV,dtype=np.float64)
+srn     = np.zeros(NV,dtype=np.float64)
+u       = np.zeros(NV,dtype=np.float64)    # x-component velocity
+v       = np.zeros(NV,dtype=np.float64)    # y-component velocity
+u_mem   = np.zeros(NV,dtype=np.float64)
+v_mem   = np.zeros(NV,dtype=np.float64)
+p       = np.zeros(NfemP,dtype=np.float64) # pressure field 
+p_mem   = np.zeros(NfemP,dtype=np.float64)
 
 convfile=open('conv'+name+'.ascii',"w")
 vrmsfile=open('vrms'+name+'.ascii',"w")
@@ -708,7 +705,7 @@ for iter in range(0,niter):
    eyyn=np.zeros(NV,dtype=np.float64)
    exyn=np.zeros(NV,dtype=np.float64)
    srn=np.zeros(NV,dtype=np.float64)
-   c=np.zeros(NV,dtype=np.float64)
+   counter=np.zeros(NV,dtype=np.float64)
 
    for iel in range(0,nel):
        for i in range(0,mV):
@@ -737,13 +734,13 @@ for iter in range(0,niter):
            exxn[iconV[i,iel]]+=e_xx
            eyyn[iconV[i,iel]]+=e_yy
            exyn[iconV[i,iel]]+=e_xy
-           c[iconV[i,iel]]+=1.
+           counter[iconV[i,iel]]+=1.
        # end for i
    # end for iel
 
-   exxn/=c
-   eyyn/=c
-   exyn/=c
+   exxn/=counter
+   eyyn/=counter
+   exyn/=counter
 
    srn[:]=np.sqrt(0.5*(exxn[:]*exxn[:]+eyyn[:]*eyyn[:])+exyn[:]*exyn[:])
 
@@ -919,7 +916,7 @@ for iter in range(0,niter):
    ######################################################################
    start = timing.time()
 
-   if iter%1==0:
+   if iter%10==0:
       filename = 'solution_nl_{:04d}'.format(iter)+name+'.vtu'
       vtufile=open(filename,"w")
       vtufile.write("<VTKFile type='UnstructuredGrid' version='0.1' byte_order='BigEndian'> \n")
@@ -975,7 +972,6 @@ for iter in range(0,niter):
    u_mem[:]=u[:]
    v_mem[:]=v[:]
    p_mem[:]=p[:]
-   etaq_mem[:]=etaq[:]
 
 #------------------------------------------------------------------------------
 # end of non-linear iterations
@@ -993,7 +989,8 @@ counter=0
 for j in range(0,nny):
     for i in range(0,nnx):
         if abs(yV[counter]-31.25e3)<1:
-           sr_file.write("%6e %6e %6e %6e %6e\n"  % (xV[counter],srn[counter],u[counter],v[counter],q[counter]))
+           etaa=viscosity(exxn[counter],eyyn[counter],exyn[counter],q[counter],cohesion,phi,iter,xV[counter],yV[counter],eta_m,eta_v)
+           sr_file.write("%6e %6e %6e %6e %6e %6e\n"  % (xV[counter],srn[counter],u[counter],v[counter],q[counter],etaa))
         counter += 1
     # end for i
 # end for i

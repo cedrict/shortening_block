@@ -1,12 +1,13 @@
 #! /bin/bash
 
 visu=0
+niter=250
 
-for nelx in 16 32 48; do
+for nelx in 16 32 48 64; do
     for phi in 0  ; do
         for eta_m in 0 19 20 ; do
             echo ${nelx} ${phi} ${eta_m}
-            python3 stone.py $nelx $visu $phi $eta_m> opla
+            python3 stone.py $nelx $visu $phi $eta_m $niter > opla
         done
     done
 done
